@@ -21,7 +21,7 @@ app.title = "داشبورد "
 PAGES_DIR = "pages"
 pages = {}
 for file in os.listdir(PAGES_DIR):
-    if file.endswith(".py") and file != "__init__.py":
+    if file.endswith(".py") and file not in ["__init__.py", "utils.py"]:
         module_name = file[:-3]  # فقط نام فایل بدون پسوند
         full_module_name = f"{PAGES_DIR}.{module_name}"
         module = importlib.import_module(full_module_name)
@@ -47,6 +47,22 @@ sidebar_items = [
 # Layout
 app.layout = html.Div([
     dcc.Location(id="url", refresh=False),
+    
+    # ----------------------------------------------------------
+    # Store برای مدیریت وضعیت اجرای تابع طولانی
+    dcc.Store(id="long-task-status", data={"running": False}),
+
+    # Modal پردازش
+    dbc.Modal([
+        dbc.ModalBody("در حال پردازش... لطفا صبر کنید")
+    ], id="loading-modal", is_open=False, centered=True),
+
+    # Modal موفقیت
+    dbc.Modal([
+        dbc.ModalBody("عملیات با موفقیت انجام شد!")
+    ], id="success-modal", is_open=False, centered=True),
+    # ----------------------------------------------------------
+
 
     # Navbar
     dbc.Navbar(

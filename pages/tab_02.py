@@ -20,3 +20,5 @@ def register_callbacks(app):
             return str(float(input_data) ** 2)
         except:
             return "Error, the input is not a number"
+
+
